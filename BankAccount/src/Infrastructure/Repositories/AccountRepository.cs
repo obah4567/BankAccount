@@ -28,10 +28,6 @@ namespace BankAccount.src.Infrastructure.Repositories
             {
                 throw new Exception("Vous n'avez pas suffisamment de solde dans votre compte pour valider ce retrait");
             }
-            if (money.Solde - amount < -money.BankOverdraftAmount)
-            {
-                throw new InvalidOperationException("Vous avez dépassé le montant autorisé pour votre découvert !");
-            }
             money.Solde -= amount;
         }
 
