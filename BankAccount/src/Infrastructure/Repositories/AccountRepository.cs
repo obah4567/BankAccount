@@ -20,10 +20,34 @@ namespace BankAccount.src.Infrastructure.Repositories
             {
                 throw new ArgumentNullException(nameof(money));
             }
-
+            if (amount <= 0) 
+            {
+                throw new ArgumentException("Le montant demander doit être positif");
+            }
             if (amount > money.Solde) 
             {
                 throw new Exception("Vous n'avez pas suffisamment de solde dans votre compte pour valider ce retrait");
+            }
+            if (money.Solde - amount < -money.BankOverdraftAmount)
+            {
+                throw new InvalidOperationException("Vous avez dépassé le montant autorisé pour votre découvert !");
+            }
+            money.Solde -= amount;
+        }
+
+        public void MoneyWithdrawalWithOverdraftAuthorization(Account money, decimal amount)
+        {
+            if (money == null)
+            {
+                throw new ArgumentNullException(nameof(money));
+            }
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Le montant demander doit être positif");
+            }
+            if (money.Solde - amount < -money.BankOverdraftAmount)
+            {
+                throw new InvalidOperationException("Vous avez dépassé le montant autorisé pour votre découvert !");
             }
             money.Solde -= amount;
         }

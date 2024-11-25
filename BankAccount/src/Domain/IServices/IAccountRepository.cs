@@ -7,5 +7,7 @@ namespace BankAccount.src.Domain.IServices
         public void MoneyDeposit(Account account, decimal amount);
 
         public void MoneyWithdrawal(Account money, decimal amount);
+
+        public void MoneyWithdrawalWithOverdraftAuthorization(Account money, decimal amount);
     }
 }

@@ -17,6 +17,7 @@ namespace BankAccount.tests
             _accountRepository = new AccountRepository();
         }
 
+        #region Deposit
         [Test]
         public void Deposit_ShouldIncreaseBalance()
         {
@@ -39,6 +40,9 @@ namespace BankAccount.tests
             Assert.Throws<ArgumentNullException>(() => _accountRepository.MoneyDeposit(null, 100));
         }
 
+        #endregion
+
+        #region Withdrawal
         [Test]
         public void Withdrawal_ShouldDecreaseBalance()
         {
@@ -62,5 +66,33 @@ namespace BankAccount.tests
             var excep = Assert.Throws<Exception>(() => _accountRepository.MoneyWithdrawal(account, 100));
             Assert.AreEqual("Vous n'avez pas suffisamment de solde dans votre compte pour valider ce retrait", excep.Message);
         }
+        #endregion
+
+        #region Overdraft
+        [Test]
+        public void Withdrawal_ShouldAllowOverdraft_WithinLimit()
+        {
+            // Arrange
+            var account = new Account("Jean Doe", 100, 50);
+
+            // Act 
+            _accountRepository.MoneyWithdrawalWithOverdraftAuthorization(account, 130);
+
+            // Assert
+            Assert.AreEqual(-30, account.Solde);
+        }
+
+        [Test]
+        public void Withdrawal_ShouldThrowException_WhenExceedingOverdraft()
+        {
+            // Arrange
+            var account = new Account("Jean Doe", 100, 50);
+
+            // Act et Assert
+            var excep = Assert.Throws<InvalidOperationException>(() => _accountRepository.MoneyWithdrawalWithOverdraftAuthorization(account, 200));
+            Assert.AreEqual("Vous avez dépassé le montant autorisé pour votre découvert !", excep.Message);
+        }
+
+        #endregion
     }
 }
