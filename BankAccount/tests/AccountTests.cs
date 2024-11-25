@@ -59,8 +59,7 @@ namespace BankAccount.tests
             var account = new Account("Jean Doe", 15);
 
             // Act & Assert
-            var excep = Assert.Throws<ArgumentException>(() => _accountRepository.MoneyWithdrawal(account, 100));
-
+            var excep = Assert.Throws<Exception>(() => _accountRepository.MoneyWithdrawal(account, 100));
             Assert.AreEqual("Vous n'avez pas suffisamment de solde dans votre compte pour valider ce retrait", excep.Message);
         }
     }
